@@ -26,6 +26,14 @@ Technical requirements:
 - Concurrency handling; dual withdrawals
 - Transaction History - Pagination?
 - API spec - spec-first vs generated
+- POST with request body (not query parameters)
+- Adopt JSON for API
+- Response codes - use correct ones
+- Representing Amounts - move beyond int
+
+### Design Questions
+- Should the ledger protect against negative balances? Or is this a business rule that lives outside of the ledger?
+- Can/should the ledger ever reject a request? (for functional reasons)
 
 ## Build
 - Maven
