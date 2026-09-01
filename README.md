@@ -26,3 +26,8 @@ Technical requirements:
 - Concurrency handling; dual withdrawals
 - Transaction History - Pagination?
 - API spec - spec-first vs generated
+
+## Build
+- Maven
+- Test approach
+- Pipeline?
