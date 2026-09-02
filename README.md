@@ -1,9 +1,34 @@
 # tinyledger
 Simple implementation of an API-driven ledger (completed as a coding exercise)
 
-## Running the application
+## Building and Running the application
+
+The application can be built using Maven. It can also be run directly from Maven using the `spring-boot:run` goal.
+
+```
+./mvnw clean install
+./mvnw spring-boot:run
+```
+
+Alternatively, once built, the application can be run using the following command:
+
+```
+java -jar target/tinyledger-0.0.1-SNAPSHOT.jar
+```
+
+The application listens on port 8080 by default; this can be changed by modifying the `server.port` property in `application.properties`.
+
 
 ### Examples
+With the application running, use `curl` to create transactions, and fetch the list of all transactions.
+
+> Note that the current API implementation uses POST without a request body; this is not recommended.
+
+```
+curl -X POST "http://localhost:8080/transactions?type=CREDIT&amount=1000
+curl -X POST "http://localhost:8080/transactions?type=DEBIT&amount=200"
+curl -X GET "http://localhost:8080/transactions"
+```
 
 ## Requirements
 The following features should be implemented:
