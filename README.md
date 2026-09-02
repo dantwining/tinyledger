@@ -18,6 +18,8 @@ java -jar target/tinyledger-0.0.1-SNAPSHOT.jar
 
 The application listens on port 8080 by default; this can be changed by modifying the `server.port` property in `application.properties`.
 
+## OpenAPI spec
+The OpenAPI spec is available at `http://localhost:8080/v3/api-docs`. For a more user-friendly experience, the Swagger UI is available at `http://localhost:8080/swagger-ui/index.html`.
 
 ### Examples
 With the application running, use `curl` to create transactions, fetch the list of all transactions, and fetch the balance.
