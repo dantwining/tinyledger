@@ -8,7 +8,8 @@ class TransactionsControllerTest {
 
     @Test
     void shouldCreateTwoTransactionsAndRetrieveThem() {
-        TransactionsController controller = new TransactionsController();
+        TransactionService transactionService = new TransactionService();
+        TransactionsController controller = new TransactionsController(transactionService);
         controller.createTransactions(TransactionType.CREDIT, 100);
         controller.createTransactions(TransactionType.DEBIT, 50);
 

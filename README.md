@@ -20,14 +20,15 @@ The application listens on port 8080 by default; this can be changed by modifyin
 
 
 ### Examples
-With the application running, use `curl` to create transactions, and fetch the list of all transactions.
+With the application running, use `curl` to create transactions, fetch the list of all transactions, and fetch the balance.
 
 > Note that the current API implementation uses POST without a request body; this is not recommended.
 
 ```
-curl -X POST "http://localhost:8080/transactions?type=CREDIT&amount=1000
+curl -X POST "http://localhost:8080/transactions?type=CREDIT&amount=1000"
 curl -X POST "http://localhost:8080/transactions?type=DEBIT&amount=200"
 curl -X GET "http://localhost:8080/transactions"
+curl -X GET "http://localhost:8080/balance"
 ```
 
 ## Requirements
@@ -59,6 +60,8 @@ Technical requirements:
 ### Design Questions
 - Should the ledger protect against negative balances? Or is this a business rule that lives outside of the ledger?
 - Can/should the ledger ever reject a request? (for functional reasons)
+- Should balance be an amount/type pair, rather than a signed int?
+- Testing stratey - should we test at the service, controller, or API layer? Or all three?
 
 ## Build
 - Maven

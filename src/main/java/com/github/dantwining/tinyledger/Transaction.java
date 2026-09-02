@@ -13,6 +13,14 @@ public class Transaction {
         this.amount = amount;
     }
 
+    public TransactionType getType() {
+        return type;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
     @Override
     public String toString() {
         return type.name() + " " + amount;
