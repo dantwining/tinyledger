@@ -13,7 +13,7 @@ public class BalanceController {
     }
 
     @GetMapping("/balance")
-    public int getBalance() {
-        return transactionService.getBalance();
+    public BalanceResponse getBalance() {
+        return new BalanceResponse(transactionService.getBalance());
     }
 }

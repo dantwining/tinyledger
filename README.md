@@ -24,11 +24,9 @@ The OpenAPI spec is available at `http://localhost:8080/v3/api-docs`. For a more
 ### Examples
 With the application running, use `curl` to create transactions, fetch the list of all transactions, and fetch the balance.
 
-> Note that the current API implementation uses POST without a request body; this is not recommended.
-
-```
-curl -X POST "http://localhost:8080/transactions?type=CREDIT&amount=1000"
-curl -X POST "http://localhost:8080/transactions?type=DEBIT&amount=200"
+```bash
+curl -X POST "http://localhost:8080/transactions" -H "Content-Type: application/json" -d '{"type":"CREDIT","amount":1000}'
+curl -X POST "http://localhost:8080/transactions" -H "Content-Type: application/json" -d '{"type":"DEBIT","amount":200}'
 curl -X GET "http://localhost:8080/transactions"
 curl -X GET "http://localhost:8080/balance"
 ```
@@ -58,6 +56,7 @@ Technical requirements:
 - Adopt JSON for API
 - Response codes - use correct ones
 - Representing Amounts - move beyond int
+- Order is preserved
 
 ### Design Questions
 - Should the ledger protect against negative balances? Or is this a business rule that lives outside of the ledger?

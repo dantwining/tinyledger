@@ -7,10 +7,13 @@ import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTe
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.client.RestTestClient;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureRestTestClient
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class HttpRequestTest {
 
     @LocalServerPort
@@ -20,15 +23,19 @@ class HttpRequestTest {
     private RestTestClient restTestClient;
 
     @Test
-    void transactionsShouldReturnCreatedTransactions() {
+    void transactionsShouldReturnCreatedTransactionsAsJson() {
         restTestClient.post()
-                .uri("http://localhost:%d/transactions?type=CREDIT&amount=100".formatted(port))
+                .uri("http://localhost:%d/transactions".formatted(port))
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new TransactionRequest(TransactionType.CREDIT, 100))
                 .exchange()
                 .expectStatus()
                 .isOk();
 
         restTestClient.post()
-                .uri("http://localhost:%d/transactions?type=DEBIT&amount=50".formatted(port))
+                .uri("http://localhost:%d/transactions".formatted(port))
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new TransactionRequest(TransactionType.DEBIT, 50))
                 .exchange()
                 .expectStatus()
                 .isOk();
@@ -38,7 +45,31 @@ class HttpRequestTest {
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectBody(String.class)
-                .isEqualTo("[CREDIT 100, DEBIT 50]");
+                .expectHeader()
+                .contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .jsonPath("$[0].type").isEqualTo("CREDIT")
+                .jsonPath("$[0].amount").isEqualTo(100)
+                .jsonPath("$[1].type").isEqualTo("DEBIT")
+                .jsonPath("$[1].amount").isEqualTo(50);
+
+        restTestClient.get()
+                .uri("http://localhost:%d/balance".formatted(port))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectHeader()
+                .contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .jsonPath("$.balance").isEqualTo(50);
+    }
+
+    @Test
+    void postTransactionsWithQueryParamsAndNoBodyShouldBeRejected() {
+        restTestClient.post()
+                .uri("http://localhost:%d/transactions?type=CREDIT&amount=100".formatted(port))
+                .exchange()
+                .expectStatus()
+                .isBadRequest();
     }
 }
