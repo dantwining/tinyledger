@@ -72,4 +72,69 @@ class HttpRequestTest {
                 .expectStatus()
                 .isBadRequest();
     }
+
+    @Test
+    void postTransactionsWithNullTypeShouldBeRejected() {
+        restTestClient.post()
+                .uri("http://localhost:%d/transactions".formatted(port))
+                .contentType(MediaType.APPLICATION_JSON)
+                .body("""
+                        {"type": null, "amount": 100}
+                        """)
+                .exchange()
+                .expectStatus()
+                .isBadRequest();
+    }
+
+    @Test
+    void postTransactionsWithMissingTypeShouldBeRejected() {
+        restTestClient.post()
+                .uri("http://localhost:%d/transactions".formatted(port))
+                .contentType(MediaType.APPLICATION_JSON)
+                .body("""
+                        {"amount": 100}
+                        """)
+                .exchange()
+                .expectStatus()
+                .isBadRequest();
+    }
+
+    @Test
+    void postTransactionsWithZeroAmountShouldBeRejected() {
+        restTestClient.post()
+                .uri("http://localhost:%d/transactions".formatted(port))
+                .contentType(MediaType.APPLICATION_JSON)
+                .body("""
+                        {"type": "CREDIT", "amount": 0}
+                        """)
+                .exchange()
+                .expectStatus()
+                .isBadRequest();
+    }
+
+    @Test
+    void postTransactionsWithNegativeAmountShouldBeRejected() {
+        restTestClient.post()
+                .uri("http://localhost:%d/transactions".formatted(port))
+                .contentType(MediaType.APPLICATION_JSON)
+                .body("""
+                        {"type": "DEBIT", "amount": -25}
+                        """)
+                .exchange()
+                .expectStatus()
+                .isBadRequest();
+    }
+
+    @Test
+    void postTransactionsWithMissingAmountShouldBeRejected() {
+        restTestClient.post()
+                .uri("http://localhost:%d/transactions".formatted(port))
+                .contentType(MediaType.APPLICATION_JSON)
+                .body("""
+                        {"type": "CREDIT"}
+                        """)
+                .exchange()
+                .expectStatus()
+                .isBadRequest();
+    }
 }

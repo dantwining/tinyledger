@@ -14,6 +14,12 @@ public class Transaction {
 
     @JsonCreator
     public Transaction(@JsonProperty("type") TransactionType type, @JsonProperty("amount") int amount) {
+        if (type == null) {
+            throw new IllegalArgumentException("Transaction type must not be null");
+        }
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Transaction amount must be greater than 0");
+        }
         this.type = type;
         this.amount = amount;
     }

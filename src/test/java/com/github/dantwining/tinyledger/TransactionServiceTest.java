@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TransactionServiceTest {
@@ -35,6 +36,21 @@ class TransactionServiceTest {
 
         assertEquals(TransactionType.DEBIT, transactions.get(1).getType());
         assertEquals(40, transactions.get(1).getAmount());
+    }
+
+    @Test
+    void createTransaction_shouldThrowExceptionWhenTypeIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> transactionService.createTransaction(null, 100));
+    }
+
+    @Test
+    void createTransaction_shouldThrowExceptionWhenAmountIsZero() {
+        assertThrows(IllegalArgumentException.class, () -> transactionService.createTransaction(TransactionType.CREDIT, 0));
+    }
+
+    @Test
+    void createTransaction_shouldThrowExceptionWhenAmountIsNegative() {
+        assertThrows(IllegalArgumentException.class, () -> transactionService.createTransaction(TransactionType.DEBIT, -50));
     }
 
     @Test
